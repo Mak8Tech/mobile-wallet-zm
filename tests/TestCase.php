@@ -3,8 +3,8 @@
 namespace Mak8Tech\MobileWalletZm\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Mak8Tech\MobileWalletZm\MobileWalletZmServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn(string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

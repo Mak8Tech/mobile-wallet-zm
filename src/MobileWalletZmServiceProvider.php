@@ -2,9 +2,9 @@
 
 namespace Mak8Tech\MobileWalletZm;
 
+use Mak8Tech\MobileWalletZm\Commands\MobileWalletZmCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Mak8Tech\MobileWalletZm\Commands\MobileWalletZmCommand;
 
 class MobileWalletZmServiceProvider extends PackageServiceProvider
 {
