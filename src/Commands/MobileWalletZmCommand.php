@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Mak8Tech\MobileWalletZm\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class MobileWalletZmCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'mobilewalletzm';
 
     public $description = 'My command';
 
