@@ -68,8 +68,8 @@ abstract class AbstractPaymentService
     public function createTransaction(
         string $phoneNumber,
         float $amount,
-        string $reference = null,
-        string $narration = null,
+        ?string $reference = null,
+        ?string $narration = null,
         $transactionable = null
     ): Transaction {
         $transaction = new Transaction([
@@ -77,7 +77,7 @@ abstract class AbstractPaymentService
             'phone_number' => $phoneNumber,
             'amount' => $amount,
             'currency' => config('mobile_wallet.currency', 'ZMW'),
-            'reference' => $reference ?? 'Payment of ' . $amount . ' ' . config('mobile_wallet.currency', 'ZMW'),
+            'reference' => $reference ?? 'Payment of '.$amount.' '.config('mobile_wallet.currency', 'ZMW'),
             'narration' => $narration ?? 'Mobile wallet payment',
             'status' => 'pending',
         ]);
@@ -94,7 +94,7 @@ abstract class AbstractPaymentService
     /**
      * Update a transaction with a response.
      */
-    protected function updateTransactionWithResponse(Transaction $transaction, array $response, string $status = null): Transaction
+    protected function updateTransactionWithResponse(Transaction $transaction, array $response, ?string $status = null): Transaction
     {
         $data = [
             'raw_response' => $response,
@@ -112,7 +112,7 @@ abstract class AbstractPaymentService
     /**
      * Get the HTTP client with appropriate headers.
      */
-    protected function getHttpClient(string $accessToken = null): \Illuminate\Http\Client\PendingRequest
+    protected function getHttpClient(?string $accessToken = null): \Illuminate\Http\Client\PendingRequest
     {
         $client = Http::acceptJson()
             ->contentType('application/json')
@@ -137,8 +137,8 @@ abstract class AbstractPaymentService
         $phoneNumber = ltrim($phoneNumber, '0');
 
         // Add country code if not already present
-        if (!str_starts_with($phoneNumber, '26')) {
-            $phoneNumber = '26' . $phoneNumber;
+        if (! str_starts_with($phoneNumber, '26')) {
+            $phoneNumber = '26'.$phoneNumber;
         }
 
         return $phoneNumber;

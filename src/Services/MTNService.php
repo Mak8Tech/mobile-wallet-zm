@@ -45,15 +45,16 @@ class MTNService extends AbstractPaymentService
         $response = Http::withHeaders([
             'Ocp-Apim-Subscription-Key' => $this->collectionSubscriptionKey,
         ])->withBasicAuth($this->apiKey, $this->apiSecret)
-          ->post("{$this->baseUrl}/collection/token/", [
-              'grant_type' => 'client_credentials'
-          ]);
+            ->post("{$this->baseUrl}/collection/token/", [
+                'grant_type' => 'client_credentials',
+            ]);
 
-        if (!$response->successful()) {
-            throw new \Exception('MTN MoMo authentication failed: ' . $response->body());
+        if (! $response->successful()) {
+            throw new \Exception('MTN MoMo authentication failed: '.$response->body());
         }
 
         $data = $response->json();
+
         return $data['access_token'];
     }
 
@@ -85,15 +86,15 @@ class MTNService extends AbstractPaymentService
 
         // Prepare request payload
         $payload = [
-            "amount" => (string) $amount,
-            "currency" => config('mobile_wallet.currency', 'ZMW'),
-            "externalId" => $transaction->transaction_id,
-            "payer" => [
-                "partyIdType" => "MSISDN",
-                "partyId" => $phoneNumber
+            'amount' => (string) $amount,
+            'currency' => config('mobile_wallet.currency', 'ZMW'),
+            'externalId' => $transaction->transaction_id,
+            'payer' => [
+                'partyIdType' => 'MSISDN',
+                'partyId' => $phoneNumber,
             ],
-            "payerMessage" => $narration ?? "Payment",
-            "payeeNote" => $reference ?? "Payment of {$amount} " . config('mobile_wallet.currency', 'ZMW')
+            'payerMessage' => $narration ?? 'Payment',
+            'payeeNote' => $reference ?? "Payment of {$amount} ".config('mobile_wallet.currency', 'ZMW'),
         ];
 
         // Update transaction with request data
@@ -109,11 +110,11 @@ class MTNService extends AbstractPaymentService
             'Ocp-Apim-Subscription-Key' => $this->collectionSubscriptionKey,
         ])->post("{$this->baseUrl}/collection/v1_0/requesttopay", $payload);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             // Mark transaction as failed
             $transaction->markAsFailed($response->body());
 
-            throw new \Exception('MTN MoMo payment request failed: ' . $response->body());
+            throw new \Exception('MTN MoMo payment request failed: '.$response->body());
         }
 
         // Update transaction with provider ID
@@ -122,14 +123,14 @@ class MTNService extends AbstractPaymentService
             'raw_response' => [
                 'status_code' => $response->status(),
                 'headers' => $response->headers(),
-            ]
+            ],
         ]);
 
         return [
             'success' => true,
             'transaction_id' => $transaction->transaction_id,
             'provider_transaction_id' => $externalTransactionId,
-            'status' => 'pending'
+            'status' => 'pending',
         ];
     }
 
@@ -153,8 +154,8 @@ class MTNService extends AbstractPaymentService
             'Ocp-Apim-Subscription-Key' => $this->collectionSubscriptionKey,
         ])->get("{$this->baseUrl}/collection/v1_0/requesttopay/{$transaction->provider_transaction_id}");
 
-        if (!$response->successful()) {
-            throw new \Exception('MTN MoMo status check failed: ' . $response->body());
+        if (! $response->successful()) {
+            throw new \Exception('MTN MoMo status check failed: '.$response->body());
         }
 
         $result = $response->json();
@@ -178,7 +179,7 @@ class MTNService extends AbstractPaymentService
             'success' => true,
             'transaction_id' => $transaction->transaction_id,
             'status' => $transaction->status,
-            'details' => $result
+            'details' => $result,
         ];
     }
 
@@ -191,7 +192,7 @@ class MTNService extends AbstractPaymentService
         $externalTransactionId = $payload['referenceId'] ?? null;
         $status = $payload['status'] ?? null;
 
-        if (!$externalTransactionId || !$status) {
+        if (! $externalTransactionId || ! $status) {
             return [
                 'success' => false,
                 'message' => 'Invalid payload',
@@ -203,7 +204,7 @@ class MTNService extends AbstractPaymentService
             ->where('provider', $this->provider)
             ->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             return [
                 'success' => false,
                 'message' => 'Transaction not found',

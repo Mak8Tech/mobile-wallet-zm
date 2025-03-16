@@ -15,18 +15,18 @@ class VerifyWebhook
     {
         // The verification process depends on the provider.
         // This is a simple example. You should adapt this to match your provider's requirements.
-        
+
         $signature = $request->header('X-Signature');
         $webhookSecret = config('mobile_wallet.webhook.secret');
-        
-        if (!$signature || !$webhookSecret) {
+
+        if (! $signature || ! $webhookSecret) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        
+
         // Simple HMAC verification example
         $calculatedSignature = hash_hmac('sha256', $request->getContent(), $webhookSecret);
-        
-        if (!hash_equals($calculatedSignature, $signature)) {
+
+        if (! hash_equals($calculatedSignature, $signature)) {
             return response()->json(['error' => 'Invalid signature'], 401);
         }
 

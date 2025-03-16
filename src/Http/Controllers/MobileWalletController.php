@@ -22,7 +22,7 @@ class MobileWalletController extends Controller
         ]);
 
         $provider = $validated['provider'] ?? null;
-        
+
         try {
             $result = MobileWallet::provider($provider)->requestPayment(
                 $validated['phone_number'],
@@ -46,7 +46,7 @@ class MobileWalletController extends Controller
     public function checkStatus(Request $request, string $transactionId)
     {
         $provider = $request->query('provider');
-        
+
         try {
             $result = MobileWallet::provider($provider)->checkTransactionStatus($transactionId);
 

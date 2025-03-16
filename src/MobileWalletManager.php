@@ -74,7 +74,7 @@ class MobileWalletManager
     {
         $config = $this->app['config']["mobile_wallet.{$name}"];
 
-        $providerClass = match($name) {
+        $providerClass = match ($name) {
             'mtn' => MTNService::class,
             'airtel' => AirtelService::class,
             'zamtel' => ZamtelService::class,

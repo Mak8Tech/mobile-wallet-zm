@@ -43,11 +43,12 @@ class AirtelService extends AbstractPaymentService
                 'client_secret' => $this->apiSecret,
             ]);
 
-        if (!$response->successful()) {
-            throw new \Exception('Airtel Money authentication failed: ' . $response->body());
+        if (! $response->successful()) {
+            throw new \Exception('Airtel Money authentication failed: '.$response->body());
         }
 
         $data = $response->json();
+
         return $data['access_token'];
     }
 
@@ -99,11 +100,11 @@ class AirtelService extends AbstractPaymentService
         $response = Http::withToken($accessToken)
             ->post("{$this->baseUrl}/merchant/v1/payments/", $payload);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             // Mark transaction as failed
             $transaction->markAsFailed($response->body());
 
-            throw new \Exception('Airtel Money payment request failed: ' . $response->body());
+            throw new \Exception('Airtel Money payment request failed: '.$response->body());
         }
 
         $result = $response->json();
@@ -144,8 +145,8 @@ class AirtelService extends AbstractPaymentService
         $response = Http::withToken($accessToken)
             ->get("{$this->baseUrl}/standard/v1/payments/{$transaction->provider_transaction_id}");
 
-        if (!$response->successful()) {
-            throw new \Exception('Airtel Money status check failed: ' . $response->body());
+        if (! $response->successful()) {
+            throw new \Exception('Airtel Money status check failed: '.$response->body());
         }
 
         $result = $response->json();
@@ -173,7 +174,7 @@ class AirtelService extends AbstractPaymentService
             'success' => true,
             'transaction_id' => $transaction->transaction_id,
             'status' => $transaction->status,
-            'details' => $result
+            'details' => $result,
         ];
     }
 
@@ -186,7 +187,7 @@ class AirtelService extends AbstractPaymentService
         $transactionId = $payload['transaction']['id'] ?? null;
         $status = $payload['status'] ?? null;
 
-        if (!$transactionId || !$status) {
+        if (! $transactionId || ! $status) {
             return [
                 'success' => false,
                 'message' => 'Invalid payload',
@@ -198,7 +199,7 @@ class AirtelService extends AbstractPaymentService
             ->where('provider', $this->provider)
             ->first();
 
-        if (!$transaction) {
+        if (! $transaction) {
             return [
                 'success' => false,
                 'message' => 'Transaction not found',

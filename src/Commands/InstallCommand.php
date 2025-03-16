@@ -3,7 +3,6 @@
 namespace Mak8Tech\MobileWalletZm\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
