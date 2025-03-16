@@ -3,7 +3,7 @@
 namespace Mak8Tech\MobileWalletZm\Services;
 
 use Illuminate\Support\Facades\Http;
-use Mak8Tech\MobileWalletZm\Models\Transaction;
+use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
 
 abstract class AbstractPaymentService
 {

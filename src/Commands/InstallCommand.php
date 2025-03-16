@@ -1,19 +1,43 @@
 <?php
 
-namespace Mak8Tech\MobileWalletZm\Commands;
+namespace Mak8Tech\MobileWalletZm\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
-class MobileWalletZmCommand extends Command
+class InstallCommand extends Command
 {
-    public $signature = 'mobilewalletzm';
+    /**
+     * The name and signature of the console command.
+     */
+    protected $signature = 'mobile-wallet:install';
 
-    public $description = 'My command';
+    /**
+     * The console command description.
+     */
+    protected $description = 'Install the Mobile Wallet ZM package';
 
-    public function handle(): int
+    /**
+     * Execute the console command.
+     */
+    public function handle(): void
     {
-        $this->comment('All done');
+        // Publish configuration
+        $this->call('vendor:publish', [
+            '--tag' => 'mobile-wallet-config',
+        ]);
 
-        return self::SUCCESS;
+        // Publish migrations
+        $this->call('vendor:publish', [
+            '--tag' => 'mobile-wallet-migrations',
+        ]);
+
+        // Publish assets
+        $this->call('vendor:publish', [
+            '--tag' => 'mobile-wallet-assets',
+        ]);
+
+        $this->info('Mobile Wallet ZM package installed successfully.');
+        $this->info('Please update your .env file with your mobile money provider credentials.');
     }
 }

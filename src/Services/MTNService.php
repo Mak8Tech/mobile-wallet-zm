@@ -4,7 +4,7 @@ namespace Mak8Tech\MobileWalletZm\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
+use Mak8Tech\MobileWalletZm\Models\Transaction;
 
 class MTNService extends AbstractPaymentService
 {
@@ -45,9 +45,9 @@ class MTNService extends AbstractPaymentService
         $response = Http::withHeaders([
             'Ocp-Apim-Subscription-Key' => $this->collectionSubscriptionKey,
         ])->withBasicAuth($this->apiKey, $this->apiSecret)
-            ->post("{$this->baseUrl}/collection/token/", [
-                'grant_type' => 'client_credentials'
-            ]);
+          ->post("{$this->baseUrl}/collection/token/", [
+              'grant_type' => 'client_credentials'
+          ]);
 
         if (!$response->successful()) {
             throw new \Exception('MTN MoMo authentication failed: ' . $response->body());
