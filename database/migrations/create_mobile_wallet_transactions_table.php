@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('transaction_id')->unique();
             $table->string('provider')->index(); // mtn, airtel, zamtel
             $table->string('provider_transaction_id')->nullable()->index();
-            $table->string('phone_number');
+            $table->string('phone_number')->index();
             $table->decimal('amount', 10, 2);
             $table->string('currency', 3)->default('ZMW');
             $table->string('status')->default('pending')->index();
@@ -25,12 +25,16 @@ return new class extends Migration
             $table->json('raw_response')->nullable();
             $table->string('payment_url')->nullable();
             $table->string('customer_name')->nullable();
-            $table->string('reference')->nullable();
+            $table->string('reference')->nullable()->index();
             $table->string('narration')->nullable();
             $table->morphs('transactionable'); // Polymorphic relationship
-            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('paid_at')->nullable()->index();
             $table->timestamp('failed_at')->nullable();
             $table->timestamps();
+            
+            // Add a composite index for common queries
+            $table->index(['provider', 'status', 'created_at']);
+            $table->index(['created_at']);
         });
     }
 

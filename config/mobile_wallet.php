@@ -30,6 +30,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Admin Authorization Configuration
+    |--------------------------------------------------------------------------
+    */
+    'admin' => [
+        'disable_authorization' => env('MOBILE_WALLET_DISABLE_ADMIN_AUTH', false),
+        'login_route' => 'login',
+        'permissions' => [
+            'mobile-wallet.admin.access',
+            'mobile-wallet.transactions.view',
+            'mobile-wallet.transactions.manage',
+            'mobile-wallet.settings.view',
+            'mobile-wallet.settings.manage',
+        ],
+        // Optional callbacks that can be defined by the application
+        'super_admin_check' => null,  // function($user) { return $user->isAdmin(); }
+        'permission_check' => null,   // function($user, $permission) { return $user->can($permission); }
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Rate Limiting Configuration
     |--------------------------------------------------------------------------
     */
@@ -40,6 +60,36 @@ return [
         'payment' => env('MOBILE_WALLET_RATE_LIMIT_PAYMENT', 30),
         'status' => env('MOBILE_WALLET_RATE_LIMIT_STATUS', 120),
         'webhook' => env('MOBILE_WALLET_RATE_LIMIT_WEBHOOK', 200),
+        'admin' => env('MOBILE_WALLET_RATE_LIMIT_ADMIN', 30),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Caching Configuration
+    |--------------------------------------------------------------------------
+    */
+    'cache' => [
+        'enabled' => env('MOBILE_WALLET_CACHE_ENABLED', true),
+        'store' => env('MOBILE_WALLET_CACHE_STORE', null), // null means the default cache store
+        'ttl' => env('MOBILE_WALLET_CACHE_TTL', 3600), // Default: 1 hour
+        'prefix' => env('MOBILE_WALLET_CACHE_PREFIX', 'mobile_wallet_'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database Configuration
+    |--------------------------------------------------------------------------
+    */
+    'database' => [
+        'connection' => env('MOBILE_WALLET_DB_CONNECTION', config('database.default')),
+        'table' => env('MOBILE_WALLET_TABLE', 'mobile_wallet_transactions'),
+        'indexes' => [
+            'provider_index' => true,
+            'status_index' => true,
+            'transaction_id_index' => true,
+            'phone_number_index' => true,
+            'created_at_index' => true,
+        ],
     ],
 
     /*
@@ -54,6 +104,7 @@ return [
         'collection_subscription_key' => env('MTN_COLLECTION_SUBSCRIPTION_KEY'),
         'disbursement_subscription_key' => env('MTN_DISBURSEMENT_SUBSCRIPTION_KEY'),
         'environment' => env('MTN_ENVIRONMENT', 'sandbox'),
+        'token_ttl' => env('MTN_TOKEN_TTL', 3600), // Default: 1 hour
     ],
 
     /*
@@ -66,6 +117,7 @@ return [
         'api_key' => env('AIRTEL_API_KEY'),
         'api_secret' => env('AIRTEL_API_SECRET'),
         'environment' => env('AIRTEL_ENVIRONMENT', 'sandbox'),
+        'token_ttl' => env('AIRTEL_TOKEN_TTL', 3600), // Default: 1 hour
     ],
 
     /*
@@ -78,16 +130,20 @@ return [
         'api_key' => env('ZAMTEL_API_KEY'),
         'api_secret' => env('ZAMTEL_API_SECRET'),
         'environment' => env('ZAMTEL_ENVIRONMENT', 'sandbox'),
+        'token_ttl' => env('ZAMTEL_TOKEN_TTL', 3600), // Default: 1 hour
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Transaction Database Settings
+    | API Request Settings
     |--------------------------------------------------------------------------
     */
-    'database' => [
-        'connection' => env('MOBILE_WALLET_DB_CONNECTION', config('database.default')),
-        'table' => env('MOBILE_WALLET_TABLE', 'mobile_wallet_transactions'),
+    'request' => [
+        'timeout' => env('MOBILE_WALLET_REQUEST_TIMEOUT', 30),
+        'retries' => env('MOBILE_WALLET_REQUEST_RETRIES', 3),
+        'retry_delay' => env('MOBILE_WALLET_REQUEST_RETRY_DELAY', 1000), // in milliseconds
+        'backoff_multiplier' => env('MOBILE_WALLET_REQUEST_BACKOFF_MULTIPLIER', 2),
+        'max_retry_delay' => env('MOBILE_WALLET_REQUEST_MAX_RETRY_DELAY', 10000), // 10 seconds max
     ],
 
     /*

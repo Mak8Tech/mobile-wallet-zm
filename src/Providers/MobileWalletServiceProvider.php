@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Mak8Tech\MobileWalletZm\Commands\InstallCommand;
 use Mak8Tech\MobileWalletZm\Contracts\SignatureVerifier;
+use Mak8Tech\MobileWalletZm\Http\Middleware\AuthorizeAdminOperations;
 use Mak8Tech\MobileWalletZm\Http\Middleware\RateLimitApiRequests;
 use Mak8Tech\MobileWalletZm\Http\Middleware\VerifyCsrfToken;
 use Mak8Tech\MobileWalletZm\Http\Middleware\VerifyWebhookSignature;
@@ -102,6 +103,7 @@ class MobileWalletServiceProvider extends ServiceProvider
         $router->aliasMiddleware('verify.webhook.signature', VerifyWebhookSignature::class);
         $router->aliasMiddleware('rate.limit', RateLimitApiRequests::class);
         $router->aliasMiddleware('mobile-wallet.csrf', VerifyCsrfToken::class);
+        $router->aliasMiddleware('mobile-wallet.admin', AuthorizeAdminOperations::class);
         
         // Publish configuration
         $this->publishes([
@@ -122,9 +124,14 @@ class MobileWalletServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../../routes/web.php' => base_path('routes/mobile-wallet.php'),
         ], 'mobile-wallet-routes');
+        
+        $this->publishes([
+            __DIR__ . '/../../routes/admin.php' => base_path('routes/mobile-wallet-admin.php'),
+        ], 'mobile-wallet-admin-routes');
 
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/admin.php');
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
