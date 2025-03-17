@@ -9,12 +9,12 @@ A comprehensive Laravel package for integrating mobile money payment services in
 
 ## Features
 
-- **Multi-provider Support**: Seamlessly integrate with MTN, Airtel, and Zamtel
-- **Laravel Integration**: Works with Laravel 12+ and includes a service provider, facade, and middleware
-- **Inertia.js & React Components**: Ready-to-use TypeScript React components for payment forms
-- **Transaction Management**: Complete lifecycle management for payment transactions
-- **Webhook Handling**: Process payment notifications from all providers
-- **Configuration**: Flexible configuration options for each provider
+-   **Multi-provider Support**: Seamlessly integrate with MTN, Airtel, and Zamtel
+-   **Laravel Integration**: Works with Laravel 12+ and includes a service provider, facade, and middleware
+-   **Inertia.js & React Components**: Ready-to-use TypeScript React components for payment forms
+-   **Transaction Management**: Complete lifecycle management for payment transactions
+-   **Webhook Handling**: Process payment notifications from all providers
+-   **Configuration**: Flexible configuration options for each provider
 
 ## Installation
 
@@ -167,30 +167,30 @@ $result = MobileWallet::provider('airtel')->requestPayment(
 The package includes a React component for payment forms. After publishing the assets, you can import and use the component:
 
 ```tsx
-import { PaymentForm } from '@/vendor/mobile-wallet-zm/Components/PaymentForm';
+import { PaymentForm } from "@/vendor/mobile-wallet-zm/components/payment-form";
 
 function CheckoutPage() {
     const handleSuccess = (data) => {
-        console.log('Payment initiated', data);
+        console.log("Payment initiated", data);
         // Handle successful payment initiation
     };
 
     const handleError = (error) => {
-        console.error('Payment failed', error);
+        console.error("Payment failed", error);
         // Handle payment error
     };
 
     return (
         <div>
             <h1>Checkout</h1>
-            <PaymentForm 
-                amount={100.00}
+            <PaymentForm
+                amount={100.0}
                 onSuccess={handleSuccess}
                 onError={handleError}
                 providers={[
-                    { id: 'mtn', name: 'MTN Mobile Money' },
-                    { id: 'airtel', name: 'Airtel Money' },
-                    { id: 'zamtel', name: 'Zamtel Kwacha' },
+                    { id: "mtn", name: "MTN Mobile Money" },
+                    { id: "airtel", name: "Airtel Money" },
+                    { id: "zamtel", name: "Zamtel Kwacha" },
                 ]}
             />
         </div>
