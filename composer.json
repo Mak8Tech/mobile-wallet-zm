@@ -71,10 +71,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Mak8tech\\MobileWalletZm\\MobileWalletServiceProvider"
+                "Mak8tech\\MobileWalletZm\\Providers\\MobileWalletServiceProvider"
             ],
             "aliases": {
-                "MobileWallet": "Mak8tech\\MobileWallet\\MobileWalletZmFacade"
+                "MobileWallet": "Mak8tech\\MobileWalletZm\\Facades\\MobileWallet"
             }
         }
     },

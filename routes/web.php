@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Mak8Tech\MobileWalletZm\Http\Controllers\WebhookController;
+use Mak8Tech\MobileWalletZm\Http\Controllers\{WebhookController, MobileWalletController};
 use Mak8Tech\MobileWalletZm\Http\Middleware\VerifyWebhook;
 
 // Public routes for webhooks

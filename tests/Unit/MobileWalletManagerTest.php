@@ -13,7 +13,7 @@ use Mockery;
 class MobileWalletManagerTest extends TestCase
 {
     protected MobileWalletManager $manager;
-    protected Application $app;
+    protected $app;
 
     protected function setUp(): void
     {

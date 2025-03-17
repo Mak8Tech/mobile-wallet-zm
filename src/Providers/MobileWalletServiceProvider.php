@@ -3,7 +3,7 @@
 namespace Mak8Tech\MobileWalletZm\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Mak8Tech\MobileWalletZm\Console\Commands\InstallCommand;
+use Mak8Tech\MobileWalletZm\Commands\InstallCommand;
 use Mak8Tech\MobileWalletZm\MobileWalletManager;
 use Mak8Tech\MobileWalletZm\Services\AirtelService;
 use Mak8Tech\MobileWalletZm\Services\MTNService;
@@ -18,7 +18,8 @@ class MobileWalletServiceProvider extends ServiceProvider
     {
         // Merge config
         $this->mergeConfigFrom(
-            __DIR__.'/../../config/mobile_wallet.php', 'mobile_wallet'
+            __DIR__ . '/../../config/mobile_wallet.php',
+            'mobile_wallet'
         );
 
         // Register the main manager
@@ -59,24 +60,29 @@ class MobileWalletServiceProvider extends ServiceProvider
     {
         // Publish configuration
         $this->publishes([
-            __DIR__.'/../../config/mobile_wallet.php' => config_path('mobile_wallet.php'),
+            __DIR__ . '/../../config/mobile_wallet.php' => config_path('mobile_wallet.php'),
         ], 'mobile-wallet-config');
 
         // Publish migrations
         $this->publishes([
-            __DIR__.'/../../database/migrations/' => database_path('migrations'),
+            __DIR__ . '/../../database/migrations/' => database_path('migrations'),
         ], 'mobile-wallet-migrations');
 
         // Publish assets (React components)
         $this->publishes([
-            __DIR__.'/../../resources/js/' => resource_path('js/vendor/mobile-wallet-zm'),
+            __DIR__ . '/../../resources/js/' => resource_path('js/vendor/mobile-wallet-zm'),
         ], 'mobile-wallet-assets');
 
+        // Publish routes
+        $this->publishes([
+            __DIR__ . '/../../routes/web.php' => base_path('routes/mobile-wallet.php'),
+        ], 'mobile-wallet-routes');
+
         // Load routes
-        $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/web.php');
 
         // Load migrations
-        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
 
         // Register commands
         if ($this->app->runningInConsole()) {

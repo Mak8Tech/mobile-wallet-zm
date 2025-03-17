@@ -1,6 +1,6 @@
 <?php
 
-namespace Mak8Tech\MobileWalletZm\Console\Commands;
+namespace Mak8Tech\MobileWalletZm\Commands;
 
 use Illuminate\Console\Command;
 
@@ -34,6 +34,11 @@ class InstallCommand extends Command
         // Publish assets
         $this->call('vendor:publish', [
             '--tag' => 'mobile-wallet-assets',
+        ]);
+
+        // Publish routes
+        $this->call('vendor:publish', [
+            '--tag' => 'mobile-wallet-routes',
         ]);
 
         $this->info('Mobile Wallet ZM package installed successfully.');

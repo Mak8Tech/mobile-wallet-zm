@@ -3,7 +3,7 @@
 namespace Mak8Tech\MobileWalletZm\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Mak8Tech\MobileWalletZm\MobileWalletServiceProvider;
+use Mak8Tech\MobileWalletZm\Providers\MobileWalletServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
