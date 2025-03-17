@@ -31,7 +31,6 @@ class WalletTransaction extends Model
     /**
      * Create a new Eloquent model instance.
      *
-     * @param  array  $attributes
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -68,7 +67,7 @@ class WalletTransaction extends Model
     /**
      * Mark the transaction as paid.
      */
-    public function markAsPaid(string $providerTransactionId = null): self
+    public function markAsPaid(?string $providerTransactionId = null): self
     {
         $this->update([
             'status' => 'paid',
@@ -82,7 +81,7 @@ class WalletTransaction extends Model
     /**
      * Mark the transaction as failed.
      */
-    public function markAsFailed(string $message = null): self
+    public function markAsFailed(?string $message = null): self
     {
         $this->update([
             'status' => 'failed',

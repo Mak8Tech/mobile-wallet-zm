@@ -11,7 +11,7 @@ class WebhookController extends Controller
     /**
      * Handle the incoming webhook.
      */
-    public function handle(Request $request, string $provider = null)
+    public function handle(Request $request, ?string $provider = null)
     {
         $provider = $provider ?? MobileWallet::getDefaultProvider();
         $payload = $request->all();
