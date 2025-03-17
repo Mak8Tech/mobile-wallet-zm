@@ -4,7 +4,7 @@ namespace Mak8Tech\MobileWalletZm\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Mak8Tech\MobileWalletZm\Models\Transaction;
+use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
 
 class MTNService extends AbstractPaymentService
 {
@@ -59,7 +59,7 @@ class MTNService extends AbstractPaymentService
         $data = $response->json();
 
         $this->logInfo('Successfully authenticated with MTN MoMo');
-        
+
         return $data['access_token'];
     }
 
@@ -99,7 +99,7 @@ class MTNService extends AbstractPaymentService
                 'partyId' => $phoneNumber,
             ],
             'payerMessage' => $narration ?? 'Payment',
-            'payeeNote' => $reference ?? "Payment of {$amount} ".config('mobile_wallet.currency', 'ZMW'),
+            'payeeNote' => $reference ?? "Payment of {$amount} " . config('mobile_wallet.currency', 'ZMW'),
         ];
 
         // Update transaction with request data
@@ -117,7 +117,7 @@ class MTNService extends AbstractPaymentService
 
         if (! $response->successful()) {
             $this->handlePaymentRequestException(
-                'MTN MoMo payment request failed', 
+                'MTN MoMo payment request failed',
                 $response,
                 $transaction
             );

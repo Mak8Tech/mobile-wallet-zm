@@ -68,7 +68,7 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
     -   Airtel Money implementation
     -   Zamtel Kwacha implementation
 -   Common payment service interface and abstract class
--   Transaction model and database migrations
+-   WalletTransaction model and database migrations
 -   Webhook handling with basic signature verification
 -   Controllers for payment processing and webhooks
 -   React payment form component with TypeScript support

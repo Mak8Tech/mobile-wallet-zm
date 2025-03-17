@@ -4,6 +4,7 @@ namespace Mak8Tech\MobileWalletZm\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 
 class WalletTransaction extends Model
@@ -26,6 +27,17 @@ class WalletTransaction extends Model
         'amount' => 'decimal:2',
         'paid_at' => 'datetime',
         'failed_at' => 'datetime',
+    ];
+
+    /**
+     * The attributes that should be encrypted.
+     *
+     * @var array
+     */
+    protected $encrypted = [
+        'phone_number',
+        'raw_request',
+        'raw_response',
     ];
 
     /**
@@ -54,6 +66,65 @@ class WalletTransaction extends Model
                 $model->transaction_id = (string) Str::uuid();
             }
         });
+    }
+
+    /**
+     * Set a given attribute on the model.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public function setAttribute($key, $value)
+    {
+        if (in_array($key, $this->encrypted) && !empty($value)) {
+            $value = Crypt::encrypt($value);
+        }
+
+        return parent::setAttribute($key, $value);
+    }
+
+    /**
+     * Get an attribute from the model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getAttribute($key)
+    {
+        $value = parent::getAttribute($key);
+
+        if (in_array($key, $this->encrypted) && !empty($value)) {
+            try {
+                return Crypt::decrypt($value);
+            } catch (\Exception $e) {
+                return $value; // Return as is if decryption fails
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * Convert the model's attributes to an array.
+     *
+     * @return array
+     */
+    public function attributesToArray()
+    {
+        $attributes = parent::attributesToArray();
+
+        foreach ($this->encrypted as $key) {
+            if (isset($attributes[$key])) {
+                try {
+                    $attributes[$key] = Crypt::decrypt($attributes[$key]);
+                } catch (\Exception $e) {
+                    // Keep as is if decryption fails
+                }
+            }
+        }
+
+        return $attributes;
     }
 
     /**

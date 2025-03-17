@@ -4,7 +4,7 @@ namespace Mak8Tech\MobileWalletZm\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Mak8Tech\MobileWalletZm\Models\Transaction;
+use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
 
 class AirtelService extends AbstractPaymentService
 {

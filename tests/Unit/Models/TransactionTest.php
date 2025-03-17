@@ -3,7 +3,7 @@
 namespace Mak8Tech\MobileWalletZm\Tests\Unit\Models;
 
 use Illuminate\Support\Facades\Crypt;
-use Mak8Tech\MobileWalletZm\Models\Transaction;
+use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
 use Mak8Tech\MobileWalletZm\Tests\TestCase;
 
 class TransactionTest extends TestCase
@@ -152,7 +152,7 @@ class TransactionTest extends TestCase
     protected function tearDown(): void
     {
         \Schema::dropIfExists('mobile_wallet_transactions');
-        
+
         parent::tearDown();
     }
-} 
+}
