@@ -36,8 +36,6 @@ class WebhookController extends Controller
     /**
      * Process the webhook request for the specified provider.
      *
-     * @param Request $request
-     * @param string $provider
      * @return \Illuminate\Http\JsonResponse
      */
     protected function processWebhook(Request $request, string $provider)

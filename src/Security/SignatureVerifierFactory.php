@@ -9,10 +9,10 @@ class SignatureVerifierFactory
 {
     /**
      * Create a signature verifier for the specified provider
-     * 
-     * @param string $provider The payment provider (mtn, airtel, zamtel)
-     * @param array $config The provider-specific configuration
-     * @return SignatureVerifier
+     *
+     * @param  string  $provider  The payment provider (mtn, airtel, zamtel)
+     * @param  array  $config  The provider-specific configuration
+     *
      * @throws InvalidArgumentException
      */
     public static function create(string $provider, array $config): SignatureVerifier
@@ -27,4 +27,4 @@ class SignatureVerifierFactory
             default => throw new InvalidArgumentException("Unsupported payment provider: {$provider}")
         };
     }
-} 
+}

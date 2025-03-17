@@ -11,11 +11,11 @@ use Mak8Tech\MobileWalletZm\Tests\TestCase;
 class AirtelServiceTest extends TestCase
 {
     protected AirtelService $airtelService;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Configure the Airtel settings
         config([
             'mobile_wallet.airtel.base_url' => 'https://api.airtel.com',
@@ -25,14 +25,14 @@ class AirtelServiceTest extends TestCase
             'mobile_wallet.airtel.environment' => 'sandbox',
             'mobile_wallet.currency' => 'ZMW',
         ]);
-        
+
         $this->airtelService = new AirtelService(
             config('mobile_wallet.airtel.base_url'),
             config('mobile_wallet.airtel.api_key'),
             config('mobile_wallet.airtel.api_secret')
         );
     }
-    
+
     public function test_it_authenticates_successfully(): void
     {
         // Mock the HTTP response for authentication
@@ -43,19 +43,19 @@ class AirtelServiceTest extends TestCase
                 'token_type' => 'Bearer',
             ], 200),
         ]);
-        
+
         $accessToken = $this->airtelService->authenticate();
-        
+
         // Verify the request was sent with the correct headers and data
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.airtel.com/auth/oauth2/token' &&
                    $request->hasHeader('Authorization') &&
                    $request['grant_type'] === 'client_credentials';
         });
-        
+
         $this->assertEquals('test-access-token', $accessToken);
     }
-    
+
     public function test_it_requests_payment_successfully(): void
     {
         // Mock the HTTP responses for authentication and payment request
@@ -73,19 +73,19 @@ class AirtelServiceTest extends TestCase
                 ],
             ], 200),
         ]);
-        
+
         $response = $this->airtelService->requestPayment(
             '0977123456',
             100.00,
             'REFERENCE123',
             'Test payment'
         );
-        
+
         // Verify the authentication request
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.airtel.com/auth/oauth2/token';
         });
-        
+
         // Verify the payment request was sent with the correct data
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.airtel.com/merchant/v1/payments/' &&
@@ -96,12 +96,12 @@ class AirtelServiceTest extends TestCase
                    $request['subscriber']['msisdn'] === '260977123456' &&
                    $request['transaction']['amount'] === 100.00;
         });
-        
+
         $this->assertTrue($response['success']);
         $this->assertEquals('pending', $response['status']);
         $this->assertArrayHasKey('transaction_id', $response);
         $this->assertArrayHasKey('provider_transaction_id', $response);
-        
+
         // Verify a transaction was created in the database
         $transaction = WalletTransaction::where('transaction_id', $response['transaction_id'])->first();
         $this->assertNotNull($transaction);
@@ -111,7 +111,7 @@ class AirtelServiceTest extends TestCase
         $this->assertEquals('REFERENCE123', $transaction->reference);
         $this->assertEquals('Test payment', $transaction->narration);
     }
-    
+
     public function test_it_checks_transaction_status_successfully(): void
     {
         // Create a test transaction
@@ -126,7 +126,7 @@ class AirtelServiceTest extends TestCase
             'transaction_id' => 'test-transaction-id',
             'provider_transaction_id' => 'test-provider-transaction-id',
         ]);
-        
+
         // Mock the HTTP responses
         Http::fake([
             'https://api.airtel.com/auth/oauth2/token' => Http::response([
@@ -144,29 +144,29 @@ class AirtelServiceTest extends TestCase
                 ],
             ], 200),
         ]);
-        
+
         $response = $this->airtelService->checkTransactionStatus('test-transaction-id');
-        
+
         // Verify the authentication request
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.airtel.com/auth/oauth2/token';
         });
-        
+
         // Verify the status check request
         Http::assertSent(function (Request $request) {
             return $request->url() === 'https://api.airtel.com/standard/v1/payments/test-provider-transaction-id' &&
                    $request->header('Authorization')[0] === 'Bearer test-access-token';
         });
-        
+
         $this->assertTrue($response['success']);
         $this->assertEquals('paid', $response['status']);
         $this->assertEquals('test-transaction-id', $response['transaction_id']);
-        
+
         // Verify the transaction was updated
         $transaction->refresh();
         $this->assertEquals('paid', $transaction->status);
     }
-    
+
     public function test_it_processes_callback_successfully(): void
     {
         // Create a test transaction
@@ -181,7 +181,7 @@ class AirtelServiceTest extends TestCase
             'transaction_id' => 'test-transaction-id',
             'provider_transaction_id' => 'test-provider-transaction-id',
         ]);
-        
+
         // Prepare callback payload
         $payload = [
             'transaction' => [
@@ -192,19 +192,19 @@ class AirtelServiceTest extends TestCase
             ],
             'status' => 'SUCCESS',
         ];
-        
+
         $response = $this->airtelService->processCallback($payload);
-        
+
         $this->assertTrue($response['success']);
         $this->assertEquals('test-transaction-id', $response['transaction_id']);
         $this->assertEquals('paid', $response['status']);
-        
+
         // Verify the transaction was updated
         $transaction->refresh();
         $this->assertEquals('paid', $transaction->status);
         $this->assertNotNull($transaction->paid_at);
     }
-    
+
     public function test_it_handles_failed_payment_in_callback(): void
     {
         // Create a test transaction
@@ -219,7 +219,7 @@ class AirtelServiceTest extends TestCase
             'transaction_id' => 'test-transaction-id',
             'provider_transaction_id' => 'test-provider-transaction-id',
         ]);
-        
+
         // Prepare callback payload
         $payload = [
             'transaction' => [
@@ -231,16 +231,16 @@ class AirtelServiceTest extends TestCase
             'status' => 'FAILED',
             'message' => 'Insufficient funds',
         ];
-        
+
         $response = $this->airtelService->processCallback($payload);
-        
+
         $this->assertTrue($response['success']);
         $this->assertEquals('failed', $response['status']);
-        
+
         // Verify the transaction was updated
         $transaction->refresh();
         $this->assertEquals('failed', $transaction->status);
         $this->assertNotNull($transaction->failed_at);
         $this->assertEquals('Insufficient funds', $transaction->message);
     }
-} 
+}

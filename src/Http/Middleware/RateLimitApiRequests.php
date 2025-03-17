@@ -3,10 +3,10 @@
 namespace Mak8Tech\MobileWalletZm\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Cache\RateLimiter;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 class RateLimitApiRequests
@@ -21,7 +21,6 @@ class RateLimitApiRequests
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Cache\RateLimiter  $limiter
      * @return void
      */
     public function __construct(RateLimiter $limiter)
@@ -32,19 +31,17 @@ class RateLimitApiRequests
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string  $prefix
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next, $prefix = 'default')
     {
-        $key = $prefix . ':' . $this->resolveRequestSignature($request);
-        
+        $key = $prefix.':'.$this->resolveRequestSignature($request);
+
         // Get rate limit configuration
-        $maxAttempts = Config::get('mobile-wallet-zm.rate_limits.' . $prefix, 60);
+        $maxAttempts = Config::get('mobile-wallet-zm.rate_limits.'.$prefix, 60);
         $decaySeconds = Config::get('mobile-wallet-zm.rate_limit_decay_minutes', 1) * 60;
-        
+
         if ($this->limiter->tooManyAttempts($key, $maxAttempts)) {
             return $this->buildRateLimitResponse($key, $maxAttempts);
         }
@@ -62,15 +59,14 @@ class RateLimitApiRequests
     /**
      * Resolve request signature.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     protected function resolveRequestSignature(Request $request)
     {
         return sha1(
-            $request->ip() .
-            $request->method() .
-            $request->getHost() .
+            $request->ip().
+            $request->method().
+            $request->getHost().
             $request->path()
         );
     }
@@ -88,7 +84,7 @@ class RateLimitApiRequests
 
         return new JsonResponse([
             'error' => 'Too Many Attempts',
-            'message' => 'Too many requests. Please try again in ' . ceil($seconds / 60) . ' minutes.',
+            'message' => 'Too many requests. Please try again in '.ceil($seconds / 60).' minutes.',
         ], Response::HTTP_TOO_MANY_REQUESTS);
     }
 
@@ -121,4 +117,4 @@ class RateLimitApiRequests
     {
         return $maxAttempts - $this->limiter->attempts($key) + 1;
     }
-} 
+}

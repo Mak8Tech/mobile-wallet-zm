@@ -81,7 +81,7 @@ class AbstractPaymentServiceTest extends TestCase
     public function test_it_updates_transaction_with_response(): void
     {
         $transaction = $this->createTransaction();
-        
+
         // Call the protected method using reflection
         $reflectionClass = new \ReflectionClass($this->service);
         $reflectionMethod = $reflectionClass->getMethod('updateTransactionWithResponse');
@@ -106,4 +106,4 @@ class AbstractPaymentServiceTest extends TestCase
             'status' => 'pending',
         ]);
     }
-} 
+}

@@ -14,10 +14,6 @@ class VerifyWebhookSignature
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $provider
-     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Mak8Tech\MobileWalletZm\Exceptions\WebhookException
      */
@@ -32,12 +28,12 @@ class VerifyWebhookSignature
         if (config('mobile_wallet.verify_webhook_signatures', true)) {
             // Resolve the appropriate signature verifier based on the provider
             $verifier = App::makeWith(SignatureVerifier::class, ['provider' => $provider]);
-            
-            if (!$verifier->verifySignature($request)) {
+
+            if (! $verifier->verifySignature($request)) {
                 throw new WebhookException('Invalid webhook signature', 403);
             }
         }
 
         return $next($request);
     }
-} 
+}

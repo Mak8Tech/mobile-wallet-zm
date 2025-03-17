@@ -3,7 +3,6 @@
 namespace Mak8Tech\MobileWalletZm\Tests\Unit\Services;
 
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Promise\RejectedPromise;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
@@ -33,7 +32,7 @@ class ApiRequestServiceTest extends TestCase
 
         // Assert that the request was made with the correct URL and method
         Http::assertSent(function (Request $request) {
-            return $request->url() === 'https://api.example.com/users' && 
+            return $request->url() === 'https://api.example.com/users' &&
                    $request->method() === 'GET';
         });
     }
@@ -58,7 +57,7 @@ class ApiRequestServiceTest extends TestCase
 
         // Assert that the request was made with the correct URL, method, and data
         Http::assertSent(function (Request $request) {
-            return $request->url() === 'https://api.example.com/users' && 
+            return $request->url() === 'https://api.example.com/users' &&
                    $request->method() === 'POST' &&
                    $request->data() === ['name' => 'John Doe'];
         });
@@ -181,4 +180,4 @@ class ApiRequestServiceTest extends TestCase
             return $request->method() === 'DELETE' && $request->url() === 'https://api.example.com/users/1';
         });
     }
-} 
+}

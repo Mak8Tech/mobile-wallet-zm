@@ -31,7 +31,7 @@ return new class extends Migration
             $table->timestamp('paid_at')->nullable()->index();
             $table->timestamp('failed_at')->nullable();
             $table->timestamps();
-            
+
             // Add a composite index for common queries
             $table->index(['provider', 'status', 'created_at']);
             $table->index(['created_at']);

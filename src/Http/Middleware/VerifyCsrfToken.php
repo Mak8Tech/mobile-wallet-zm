@@ -5,7 +5,6 @@ namespace Mak8Tech\MobileWalletZm\Http\Middleware;
 use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
 use Illuminate\Http\Request;
-use Illuminate\Session\TokenMismatchException;
 
 class VerifyCsrfToken extends BaseVerifier
 {
@@ -23,7 +22,6 @@ class VerifyCsrfToken extends BaseVerifier
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      *
      * @throws \Illuminate\Session\TokenMismatchException
@@ -41,29 +39,27 @@ class VerifyCsrfToken extends BaseVerifier
     /**
      * Determine if the request is an API request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function isApiRequest(Request $request)
     {
-        return $request->is('api/mobile-wallet/*') && !$request->is('api/mobile-wallet/webhook/*');
+        return $request->is('api/mobile-wallet/*') && ! $request->is('api/mobile-wallet/webhook/*');
     }
 
     /**
      * Determine if the request has a valid API token.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function hasValidApiToken(Request $request)
     {
         $token = $request->header('X-API-Token');
-        
+
         if (empty($token)) {
             return false;
         }
-        
+
         // Verify the token against the configured API token
         return hash_equals(config('mobile_wallet.api_token'), $token);
     }
-} 
+}

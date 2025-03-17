@@ -120,8 +120,6 @@ class TransactionTest extends TestCase
 
     /**
      * Setup the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -146,8 +144,6 @@ class TransactionTest extends TestCase
 
     /**
      * Clean up the testing environment before the next test.
-     *
-     * @return void
      */
     protected function tearDown(): void
     {

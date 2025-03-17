@@ -21,4 +21,4 @@ class PaymentRequestException extends MobileWalletException
             $code
         );
     }
-} 
+}

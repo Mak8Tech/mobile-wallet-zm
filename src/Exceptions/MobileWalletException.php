@@ -30,7 +30,7 @@ class MobileWalletException extends Exception
         ?string $provider = null,
         mixed $rawResponse = null,
         int $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         parent::__construct($message, $code, $previous);
         $this->errorCode = $errorCode;
@@ -85,4 +85,4 @@ class MobileWalletException extends Exception
     {
         return json_encode($this->toArray());
     }
-} 
+}

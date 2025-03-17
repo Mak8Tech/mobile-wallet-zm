@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Mak8Tech\MobileWalletZm\Http\Controllers\{WebhookController, MobileWalletController};
+use Mak8Tech\MobileWalletZm\Http\Controllers\MobileWalletController;
+use Mak8Tech\MobileWalletZm\Http\Controllers\WebhookController;
 use Mak8Tech\MobileWalletZm\Http\Middleware\VerifyWebhook;
 
 // Public routes for webhooks
@@ -9,11 +10,11 @@ Route::middleware(['rate.limit:webhook', VerifyWebhook::class])->group(function 
     Route::post('api/mobile-wallet/webhook/mtn', [WebhookController::class, 'handleMTN'])
         ->name('mobile-wallet.webhook.mtn')
         ->middleware('verify.webhook.signature:mtn');
-        
+
     Route::post('api/mobile-wallet/webhook/airtel', [WebhookController::class, 'handleAirtel'])
         ->name('mobile-wallet.webhook.airtel')
         ->middleware('verify.webhook.signature:airtel');
-        
+
     Route::post('api/mobile-wallet/webhook/zamtel', [WebhookController::class, 'handleZamtel'])
         ->name('mobile-wallet.webhook.zamtel')
         ->middleware('verify.webhook.signature:zamtel');

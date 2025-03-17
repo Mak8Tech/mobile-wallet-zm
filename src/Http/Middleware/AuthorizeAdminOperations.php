@@ -13,8 +13,6 @@ class AuthorizeAdminOperations
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string|null  $permission
      * @return mixed
      */
@@ -24,35 +22,36 @@ class AuthorizeAdminOperations
         if (Config::get('mobile_wallet.admin.disable_authorization', false)) {
             return $next($request);
         }
-        
+
         // Check if the user is authenticated
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return $this->unauthorized('Unauthenticated.');
         }
-        
+
         $user = Auth::user();
-        
+
         // Check if the user is a super admin
         if ($this->isSuperAdmin($user)) {
             return $next($request);
         }
-        
+
         // If a specific permission is required, check if the user has it
         if ($permission) {
             if ($this->hasPermission($user, $permission)) {
                 return $next($request);
             }
+
             return $this->unauthorized("Insufficient permissions to perform this action: {$permission}");
         }
-        
+
         // If no specific permission is required, check if the user has any admin permissions
         if ($this->hasAnyAdminPermission($user)) {
             return $next($request);
         }
-        
+
         return $this->unauthorized('Insufficient permissions to access the admin area.');
     }
-    
+
     /**
      * Check if the user is a super admin.
      *
@@ -63,19 +62,19 @@ class AuthorizeAdminOperations
     {
         // Use the super_admin_check from config if available
         $superAdminCheck = Config::get('mobile_wallet.admin.super_admin_check');
-        
+
         if ($superAdminCheck && is_callable($superAdminCheck)) {
             return call_user_func($superAdminCheck, $user);
         }
-        
+
         // Otherwise check if user has a super_admin flag
         if (method_exists($user, 'isSuperAdmin')) {
             return $user->isSuperAdmin();
         }
-        
+
         return $user->super_admin ?? false;
     }
-    
+
     /**
      * Check if the user has the specified permission.
      *
@@ -87,23 +86,23 @@ class AuthorizeAdminOperations
     {
         // Use the permission_check from config if available
         $permissionCheck = Config::get('mobile_wallet.admin.permission_check');
-        
+
         if ($permissionCheck && is_callable($permissionCheck)) {
             return call_user_func($permissionCheck, $user, $permission);
         }
-        
+
         // Otherwise check if user has permissions property or method
         if (method_exists($user, 'hasPermission')) {
             return $user->hasPermission($permission);
         }
-        
+
         if (method_exists($user, 'hasPermissionTo')) {
             return $user->hasPermissionTo($permission);
         }
-        
+
         return in_array($permission, $user->permissions ?? []);
     }
-    
+
     /**
      * Check if the user has any admin permissions.
      *
@@ -115,18 +114,18 @@ class AuthorizeAdminOperations
         $adminPermissions = Config::get('mobile_wallet.admin.permissions', [
             'mobile-wallet.admin.access',
             'mobile-wallet.transactions.view',
-            'mobile-wallet.transactions.manage'
+            'mobile-wallet.transactions.manage',
         ]);
-        
+
         foreach ($adminPermissions as $permission) {
             if ($this->hasPermission($user, $permission)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Return an unauthorized response.
      *
@@ -141,8 +140,8 @@ class AuthorizeAdminOperations
                 'message' => $message,
             ], Response::HTTP_FORBIDDEN);
         }
-        
+
         return redirect()->route(Config::get('mobile_wallet.admin.login_route', 'login'))
             ->with('error', $message);
     }
-} 
+}

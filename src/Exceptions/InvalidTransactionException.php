@@ -21,4 +21,4 @@ class InvalidTransactionException extends MobileWalletException
             $code
         );
     }
-} 
+}

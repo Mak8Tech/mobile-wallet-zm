@@ -156,7 +156,7 @@ abstract class AbstractPaymentService
     protected function handleAuthenticationException(string $message, $response): never
     {
         $this->logError('Authentication error', $message, $response);
-        
+
         throw new AuthenticationException(
             $message,
             $this->provider,
@@ -172,9 +172,9 @@ abstract class AbstractPaymentService
         if ($transaction) {
             $transaction->markAsFailed($message);
         }
-        
+
         $this->logError('Payment request error', $message, $response);
-        
+
         throw new PaymentRequestException(
             $message,
             $this->provider,
@@ -188,7 +188,7 @@ abstract class AbstractPaymentService
     protected function handlePaymentStatusException(string $message, $response): never
     {
         $this->logError('Payment status error', $message, $response);
-        
+
         throw new PaymentStatusException(
             $message,
             $this->provider,
@@ -202,7 +202,7 @@ abstract class AbstractPaymentService
     protected function handleWebhookException(string $message, $response): never
     {
         $this->logError('Webhook error', $message, $response);
-        
+
         throw new WebhookException(
             $message,
             $this->provider,
@@ -216,7 +216,7 @@ abstract class AbstractPaymentService
     protected function handleInvalidTransactionException(string $message, $details = null): never
     {
         $this->logError('Invalid transaction', $message, $details);
-        
+
         throw new InvalidTransactionException(
             $message,
             $this->provider,

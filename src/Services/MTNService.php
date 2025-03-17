@@ -99,7 +99,7 @@ class MTNService extends AbstractPaymentService
                 'partyId' => $phoneNumber,
             ],
             'payerMessage' => $narration ?? 'Payment',
-            'payeeNote' => $reference ?? "Payment of {$amount} " . config('mobile_wallet.currency', 'ZMW'),
+            'payeeNote' => $reference ?? "Payment of {$amount} ".config('mobile_wallet.currency', 'ZMW'),
         ];
 
         // Update transaction with request data

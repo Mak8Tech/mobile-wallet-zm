@@ -13,6 +13,7 @@ use Mockery;
 class MobileWalletManagerTest extends TestCase
 {
     protected MobileWalletManager $manager;
+
     protected $app;
 
     protected function setUp(): void
@@ -159,4 +160,4 @@ class MobileWalletManagerTest extends TestCase
         $result = $managerMock->authenticate();
         $this->assertEquals('test-token', $result);
     }
-} 
+}

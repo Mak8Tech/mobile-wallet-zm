@@ -18,7 +18,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'verify_webhook_signatures' => env('MOBILE_WALLET_VERIFY_SIGNATURES', true),
-    
+
     'bypass_signature_verification_in_testing' => env('MOBILE_WALLET_BYPASS_SIGNATURES_IN_TESTING', true),
 
     'api_token' => env('MOBILE_WALLET_API_TOKEN'),
@@ -54,7 +54,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'rate_limit_decay_minutes' => env('MOBILE_WALLET_RATE_LIMIT_DECAY_MINUTES', 1),
-    
+
     'rate_limits' => [
         'default' => env('MOBILE_WALLET_RATE_LIMIT_DEFAULT', 60),
         'payment' => env('MOBILE_WALLET_RATE_LIMIT_PAYMENT', 30),

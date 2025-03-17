@@ -21,4 +21,4 @@ class WebhookException extends MobileWalletException
             $code
         );
     }
-} 
+}

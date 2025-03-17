@@ -77,7 +77,7 @@ class WalletTransaction extends Model
      */
     public function setAttribute($key, $value)
     {
-        if (in_array($key, $this->encrypted) && !empty($value)) {
+        if (in_array($key, $this->encrypted) && ! empty($value)) {
             $value = Crypt::encrypt($value);
         }
 
@@ -94,7 +94,7 @@ class WalletTransaction extends Model
     {
         $value = parent::getAttribute($key);
 
-        if (in_array($key, $this->encrypted) && !empty($value)) {
+        if (in_array($key, $this->encrypted) && ! empty($value)) {
             try {
                 return Crypt::decrypt($value);
             } catch (\Exception $e) {

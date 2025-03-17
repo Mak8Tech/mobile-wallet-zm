@@ -21,4 +21,4 @@ class AuthenticationException extends MobileWalletException
             $code
         );
     }
-} 
+}

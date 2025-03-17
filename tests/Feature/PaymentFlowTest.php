@@ -38,10 +38,10 @@ class PaymentFlowTest extends TestCase
                 'expires_in' => 3600,
                 'token_type' => 'Bearer',
             ], 200),
-            
+
             // Payment request response
             'https://api.mtn.com/collection/v1_0/requesttopay' => Http::response([], 202),
-            
+
             // Status check response
             'https://api.mtn.com/collection/v1_0/requesttopay/*' => Http::response([
                 'status' => 'SUCCESSFUL',
@@ -64,7 +64,7 @@ class PaymentFlowTest extends TestCase
         $this->assertTrue($response['success']);
         $this->assertEquals('pending', $response['status']);
         $this->assertArrayHasKey('transaction_id', $response);
-        
+
         // Get the transaction ID for subsequent checks
         $transactionId = $response['transaction_id'];
 
@@ -82,7 +82,7 @@ class PaymentFlowTest extends TestCase
         $statusResponse = MobileWallet::checkTransactionStatus($transactionId);
         $this->assertTrue($statusResponse['success']);
         $this->assertEquals('paid', $statusResponse['status']);
-        
+
         // 6. Verify the transaction was updated
         $transaction->refresh();
         $this->assertEquals('paid', $transaction->status);
@@ -99,7 +99,7 @@ class PaymentFlowTest extends TestCase
         $callbackResponse = MobileWallet::provider('mtn')->processCallback($callbackPayload);
         $this->assertTrue($callbackResponse['success']);
         $this->assertEquals('paid', $callbackResponse['status']);
-        
+
         // 8. Test the webhook endpoint
         $response = $this->postJson(route('mobile-wallet.webhook', ['provider' => 'mtn']), $callbackPayload);
         $response->assertStatus(200);
@@ -116,7 +116,7 @@ class PaymentFlowTest extends TestCase
                 'expires_in' => 3600,
                 'token_type' => 'Bearer',
             ], 200),
-            
+
             // Payment request response
             'https://api.mtn.com/collection/v1_0/requesttopay' => Http::response([], 202),
         ]);
@@ -129,7 +129,7 @@ class PaymentFlowTest extends TestCase
             'reference' => 'Test reference',
             'narration' => 'Test payment',
         ]);
-        
+
         // 3. Verify the response
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -139,10 +139,10 @@ class PaymentFlowTest extends TestCase
             'provider_transaction_id',
             'status',
         ]);
-        
+
         // 4. Verify a transaction was created
         $responseData = $response->json();
         $transaction = WalletTransaction::where('transaction_id', $responseData['transaction_id'])->first();
         $this->assertNotNull($transaction);
     }
-} 
+}

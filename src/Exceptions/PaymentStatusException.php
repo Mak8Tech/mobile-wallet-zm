@@ -21,4 +21,4 @@ class PaymentStatusException extends MobileWalletException
             $code
         );
     }
-} 
+}

@@ -38,12 +38,9 @@ class CachedTokenService
     /**
      * Create a new cached token service.
      *
-     * @param  string  $provider
-     * @param  callable  $refreshCallback
-     * @param  int  $ttl
      * @return void
      */
-    public function __construct(string $provider, callable $refreshCallback, int $ttl = null)
+    public function __construct(string $provider, callable $refreshCallback, ?int $ttl = null)
     {
         $this->cache = Cache::store(config('mobile_wallet.cache.store', 'file'));
         $this->refreshCallback = $refreshCallback;
@@ -53,9 +50,6 @@ class CachedTokenService
 
     /**
      * Get a token for the given key.
-     *
-     * @param  string  $key
-     * @return string
      */
     public function getToken(string $key = 'default'): string
     {
@@ -63,18 +57,17 @@ class CachedTokenService
 
         if ($this->cache->has($cacheKey)) {
             Log::debug("Using cached token for {$cacheKey}");
+
             return $this->cache->get($cacheKey);
         }
 
         Log::debug("Refreshing token for {$cacheKey}");
+
         return $this->refreshToken($key);
     }
 
     /**
      * Refresh and cache a token for the given key.
-     *
-     * @param  string  $key
-     * @return string
      */
     public function refreshToken(string $key = 'default'): string
     {
@@ -91,9 +84,6 @@ class CachedTokenService
 
     /**
      * Forget a cached token for the given key.
-     *
-     * @param  string  $key
-     * @return bool
      */
     public function forgetToken(string $key = 'default'): bool
     {
@@ -102,12 +92,10 @@ class CachedTokenService
 
     /**
      * Clear all cached tokens.
-     *
-     * @return bool
      */
     public function clearTokens(): bool
     {
-        $pattern = $this->keyPrefix . '_*';
+        $pattern = $this->keyPrefix.'_*';
         $keys = $this->cache->getStore()->getKeys($pattern);
 
         foreach ($keys as $key) {
@@ -119,12 +107,9 @@ class CachedTokenService
 
     /**
      * Get the cache key for the given token key.
-     *
-     * @param  string  $key
-     * @return string
      */
     protected function getCacheKey(string $key): string
     {
         return "{$this->keyPrefix}_{$key}";
     }
-} 
+}

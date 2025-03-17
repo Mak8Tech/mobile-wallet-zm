@@ -140,4 +140,4 @@ class MobileWalletExceptionTest extends TestCase
         $this->assertEquals(['payload' => 'invalid'], $exception->getRawResponse());
         $this->assertEquals(400, $exception->getCode());
     }
-} 
+}
