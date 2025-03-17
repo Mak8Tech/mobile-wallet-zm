@@ -20,6 +20,11 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
     -   Unit tests for facade implementation
     -   Feature tests for complete payment flows
     -   Feature tests for controller endpoints
+-   Consistent error handling system:
+    -   Base exception class with standardized error formatting
+    -   Provider-specific exceptions for different error types
+    -   Detailed error logging with context
+    -   Standardized JSON error responses
 
 ### Improved
 
@@ -28,6 +33,7 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
 -   Performance optimizations via caching
 -   Documentation coverage
 -   Test environment setup for easier testing
+-   Error handling across all payment providers
 
 ## 0.0.1-beta - 2025-03-16
 

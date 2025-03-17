@@ -3,6 +3,12 @@
 namespace Mak8Tech\MobileWalletZm\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Mak8Tech\MobileWalletZm\Exceptions\AuthenticationException;
+use Mak8Tech\MobileWalletZm\Exceptions\InvalidTransactionException;
+use Mak8Tech\MobileWalletZm\Exceptions\PaymentRequestException;
+use Mak8Tech\MobileWalletZm\Exceptions\PaymentStatusException;
+use Mak8Tech\MobileWalletZm\Exceptions\WebhookException;
 use Mak8Tech\MobileWalletZm\Models\WalletTransaction as Transaction;
 
 abstract class AbstractPaymentService
@@ -142,5 +148,102 @@ abstract class AbstractPaymentService
         }
 
         return $phoneNumber;
+    }
+
+    /**
+     * Handle authentication exception.
+     */
+    protected function handleAuthenticationException(string $message, $response): never
+    {
+        $this->logError('Authentication error', $message, $response);
+        
+        throw new AuthenticationException(
+            $message,
+            $this->provider,
+            $response instanceof \Illuminate\Http\Client\Response ? $response->json() : $response
+        );
+    }
+
+    /**
+     * Handle payment request exception.
+     */
+    protected function handlePaymentRequestException(string $message, $response, ?Transaction $transaction = null): never
+    {
+        if ($transaction) {
+            $transaction->markAsFailed($message);
+        }
+        
+        $this->logError('Payment request error', $message, $response);
+        
+        throw new PaymentRequestException(
+            $message,
+            $this->provider,
+            $response instanceof \Illuminate\Http\Client\Response ? $response->json() : $response
+        );
+    }
+
+    /**
+     * Handle payment status exception.
+     */
+    protected function handlePaymentStatusException(string $message, $response): never
+    {
+        $this->logError('Payment status error', $message, $response);
+        
+        throw new PaymentStatusException(
+            $message,
+            $this->provider,
+            $response instanceof \Illuminate\Http\Client\Response ? $response->json() : $response
+        );
+    }
+
+    /**
+     * Handle webhook exception.
+     */
+    protected function handleWebhookException(string $message, $response): never
+    {
+        $this->logError('Webhook error', $message, $response);
+        
+        throw new WebhookException(
+            $message,
+            $this->provider,
+            $response instanceof \Illuminate\Http\Client\Response ? $response->json() : $response
+        );
+    }
+
+    /**
+     * Handle invalid transaction exception.
+     */
+    protected function handleInvalidTransactionException(string $message, $details = null): never
+    {
+        $this->logError('Invalid transaction', $message, $details);
+        
+        throw new InvalidTransactionException(
+            $message,
+            $this->provider,
+            $details
+        );
+    }
+
+    /**
+     * Log an error with context.
+     */
+    protected function logError(string $type, string $message, $details = null): void
+    {
+        Log::error("Mobile Wallet [{$this->provider}] {$type}: {$message}", [
+            'provider' => $this->provider,
+            'details' => $details instanceof \Illuminate\Http\Client\Response ? [
+                'status' => $details->status(),
+                'body' => $details->body(),
+                'headers' => $details->headers(),
+            ] : $details,
+        ]);
+    }
+
+    /**
+     * Log information with context.
+     */
+    protected function logInfo(string $message, array $context = []): void
+    {
+        Log::info("Mobile Wallet [{$this->provider}]: {$message}", array_merge(['provider' => $this->provider], $context));
     }
 }

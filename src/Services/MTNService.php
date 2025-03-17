@@ -50,11 +50,16 @@ class MTNService extends AbstractPaymentService
             ]);
 
         if (! $response->successful()) {
-            throw new \Exception('MTN MoMo authentication failed: '.$response->body());
+            $this->handleAuthenticationException(
+                'MTN MoMo authentication failed',
+                $response
+            );
         }
 
         $data = $response->json();
 
+        $this->logInfo('Successfully authenticated with MTN MoMo');
+        
         return $data['access_token'];
     }
 
@@ -111,10 +116,11 @@ class MTNService extends AbstractPaymentService
         ])->post("{$this->baseUrl}/collection/v1_0/requesttopay", $payload);
 
         if (! $response->successful()) {
-            // Mark transaction as failed
-            $transaction->markAsFailed($response->body());
-
-            throw new \Exception('MTN MoMo payment request failed: '.$response->body());
+            $this->handlePaymentRequestException(
+                'MTN MoMo payment request failed', 
+                $response,
+                $transaction
+            );
         }
 
         // Update transaction with provider ID
@@ -155,7 +161,10 @@ class MTNService extends AbstractPaymentService
         ])->get("{$this->baseUrl}/collection/v1_0/requesttopay/{$transaction->provider_transaction_id}");
 
         if (! $response->successful()) {
-            throw new \Exception('MTN MoMo status check failed: '.$response->body());
+            $this->handlePaymentStatusException(
+                'MTN MoMo status check failed',
+                $response
+            );
         }
 
         $result = $response->json();
@@ -193,10 +202,10 @@ class MTNService extends AbstractPaymentService
         $status = $payload['status'] ?? null;
 
         if (! $externalTransactionId || ! $status) {
-            return [
-                'success' => false,
-                'message' => 'Invalid payload',
-            ];
+            $this->handleWebhookException(
+                'Invalid payload: missing referenceId or status',
+                $payload
+            );
         }
 
         // Find the transaction
@@ -205,10 +214,10 @@ class MTNService extends AbstractPaymentService
             ->first();
 
         if (! $transaction) {
-            return [
-                'success' => false,
-                'message' => 'Transaction not found',
-            ];
+            $this->handleInvalidTransactionException(
+                'Transaction not found for the given referenceId',
+                ['referenceId' => $externalTransactionId]
+            );
         }
 
         // Update transaction status based on the callback
