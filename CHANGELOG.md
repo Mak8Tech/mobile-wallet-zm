@@ -20,6 +20,10 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
     -   Unit tests for facade implementation
     -   Feature tests for complete payment flows
     -   Feature tests for controller endpoints
+    -   Frontend component tests for PaymentForm component:
+        -   Tests for rendering and UI elements
+        -   Tests for form validation
+        -   Tests for API interactions and error handling
 -   Consistent error handling system:
     -   Base exception class with standardized error formatting
     -   Provider-specific exceptions for different error types
