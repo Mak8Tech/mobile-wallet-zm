@@ -12,9 +12,34 @@ return [
 
     'country_code' => env('MOBILE_WALLET_COUNTRY_CODE', 'ZM'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Security Configuration
+    |--------------------------------------------------------------------------
+    */
+    'verify_webhook_signatures' => env('MOBILE_WALLET_VERIFY_SIGNATURES', true),
+    
+    'bypass_signature_verification_in_testing' => env('MOBILE_WALLET_BYPASS_SIGNATURES_IN_TESTING', true),
+
+    'api_token' => env('MOBILE_WALLET_API_TOKEN'),
+
     'webhook' => [
         'secret' => env('MOBILE_WALLET_WEBHOOK_SECRET'),
         'url_path' => env('MOBILE_WALLET_WEBHOOK_PATH', 'api/mobile-wallet/webhook'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rate Limiting Configuration
+    |--------------------------------------------------------------------------
+    */
+    'rate_limit_decay_minutes' => env('MOBILE_WALLET_RATE_LIMIT_DECAY_MINUTES', 1),
+    
+    'rate_limits' => [
+        'default' => env('MOBILE_WALLET_RATE_LIMIT_DEFAULT', 60),
+        'payment' => env('MOBILE_WALLET_RATE_LIMIT_PAYMENT', 30),
+        'status' => env('MOBILE_WALLET_RATE_LIMIT_STATUS', 120),
+        'webhook' => env('MOBILE_WALLET_RATE_LIMIT_WEBHOOK', 200),
     ],
 
     /*

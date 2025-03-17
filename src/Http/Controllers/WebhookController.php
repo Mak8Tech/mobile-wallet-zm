@@ -10,11 +10,38 @@ use Mak8Tech\MobileWalletZm\Facades\MobileWallet;
 class WebhookController extends Controller
 {
     /**
-     * Handle the incoming webhook.
+     * Handle the incoming webhook from MTN.
      */
-    public function handle(Request $request, ?string $provider = null)
+    public function handleMTN(Request $request)
     {
-        $provider = $provider ?? MobileWallet::getDefaultProvider();
+        return $this->processWebhook($request, 'mtn');
+    }
+
+    /**
+     * Handle the incoming webhook from Airtel.
+     */
+    public function handleAirtel(Request $request)
+    {
+        return $this->processWebhook($request, 'airtel');
+    }
+
+    /**
+     * Handle the incoming webhook from Zamtel.
+     */
+    public function handleZamtel(Request $request)
+    {
+        return $this->processWebhook($request, 'zamtel');
+    }
+
+    /**
+     * Process the webhook request for the specified provider.
+     *
+     * @param Request $request
+     * @param string $provider
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function processWebhook(Request $request, string $provider)
+    {
         $payload = $request->all();
 
         try {

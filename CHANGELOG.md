@@ -7,6 +7,21 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
 ### Added
 
 -   Provider-specific signature verification for webhooks
+    -   Implemented `SignatureVerifier` interface
+    -   Created provider-specific verifiers for MTN, Airtel, and Zamtel
+    -   Added `SignatureVerifierFactory` for creating appropriate verifiers
+    -   Implemented middleware for verifying webhook signatures
+    -   Added tests for signature verification
+-   Rate limiting for API endpoints
+    -   Implemented `RateLimitApiRequests` middleware
+    -   Added configuration for different rate limits by endpoint type
+    -   Applied rate limiting to payment, status, and webhook endpoints
+    -   Added tests for rate limiting middleware
+-   Enhanced security measures
+    -   Implemented encryption for sensitive data in the database
+    -   Added CSRF protection for payment endpoints
+    -   Created API token authentication for API requests
+    -   Added tests for data encryption and CSRF protection
 -   Detailed logging with different severity levels
 -   Retry mechanism for API calls
 -   Frontend loading state indicators and improved error feedback
@@ -33,6 +48,10 @@ All notable changes to `mobile-wallet-zm` will be documented in this file.
 ### Improved
 
 -   Security enhancements for API endpoints
+    -   Added provider-specific webhook routes with dedicated handlers
+    -   Implemented signature verification for each provider
+    -   Added encryption for sensitive transaction data
+    -   Implemented CSRF protection with API token support
 -   Input sanitization for all API requests
 -   Performance optimizations via caching
 -   Documentation coverage
