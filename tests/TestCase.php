@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
         // Set up the database migration for testing
@@ -31,7 +31,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $migration = include __DIR__.'/../database/migrations/create_mobile_wallet_transactions_table.php';
+        $migration = include __DIR__ . '/../database/migrations/create_mobile_wallet_transactions_table.php';
         $migration->up();
     }
 
@@ -39,7 +39,7 @@ class TestCase extends Orchestra
     {
         // Create the transactions table if it doesn't exist
         if (! $this->app['db']->connection()->getSchemaBuilder()->hasTable(config('mobile_wallet.database.table', 'mobile_wallet_transactions'))) {
-            $migration = include __DIR__.'/../database/migrations/create_mobile_wallet_transactions_table.php';
+            $migration = include __DIR__ . '/../database/migrations/create_mobile_wallet_transactions_table.php';
             $migration->up();
         }
     }
