@@ -27,12 +27,12 @@ return new class extends Migration
             $table->string('customer_name')->nullable();
             $table->string('reference')->nullable()->index();
             $table->string('narration')->nullable();
-            
+
             // Use explicit columns with a custom index name instead of morphs()
             $table->unsignedBigInteger('transactionable_id');
             $table->string('transactionable_type');
             $table->index(['transactionable_type', 'transactionable_id'], 'trx_morph_idx');
-            
+
             $table->timestamp('paid_at')->nullable()->index();
             $table->timestamp('failed_at')->nullable();
             $table->timestamps();
