@@ -33,3 +33,5 @@ testbench.yaml
 .env
 coverage/*
 
+*.lock
+*.log
