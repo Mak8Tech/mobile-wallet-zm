@@ -13,11 +13,11 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'Mak8Tech\\MobileWalletZm\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
 
-        // Set up the database migration for testing
-        $this->setupDatabase();
+        // Don't call setupDatabase() here to avoid duplicate migrations
+        // The database setup will be handled by RefreshDatabase trait or getEnvironmentSetUp
     }
 
     protected function getPackageProviders($app)
@@ -31,16 +31,12 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        $migration = include __DIR__.'/../database/migrations/create_mobile_wallet_transactions_table.php';
+        // Drop the table if it exists before creating it
+        $app['db']->connection()->getSchemaBuilder()->dropIfExists(config('mobile_wallet.database.table', 'mobile_wallet_transactions'));
+
+        $migration = include __DIR__ . '/../database/migrations/create_mobile_wallet_transactions_table.php';
         $migration->up();
     }
 
-    protected function setupDatabase()
-    {
-        // Create the transactions table if it doesn't exist
-        if (! $this->app['db']->connection()->getSchemaBuilder()->hasTable(config('mobile_wallet.database.table', 'mobile_wallet_transactions'))) {
-            $migration = include __DIR__.'/../database/migrations/create_mobile_wallet_transactions_table.php';
-            $migration->up();
-        }
-    }
+    // Remove the setupDatabase method as it's causing duplicate migrations
 }

@@ -2,13 +2,12 @@
 
 namespace Mak8Tech\MobileWalletZm\Tests\Unit\Models;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mak8Tech\MobileWalletZm\Models\WalletTransaction;
 use Mak8Tech\MobileWalletZm\Tests\TestCase;
 
 class WalletTransactionTest extends TestCase
 {
-    use RefreshDatabase;
+    // We're not using RefreshDatabase trait to avoid migration issues
 
     protected WalletTransaction $transaction;
 

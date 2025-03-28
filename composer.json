@@ -1,5 +1,6 @@
 {
     "name": "mak8tech/mobile-wallet-zm",
+    "version": "1.0.0",
     "description": "A Laravel package for mobile money payments in Zambia (MTN, Airtel, Zamtel)",
     "type": "library",
     "keywords": [
@@ -38,7 +39,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mak8tech\\MobileWalletZm\\": "src/",
+            "Mak8Tech\\MobileWalletZm\\": "src/",
             "Mak8Tech\\MobileWalletZm\\Commands\\": "src/Commands/",
             "Mak8Tech\\MobileWalletZm\\Database\\Factories\\": "database/factories/"
         }
@@ -66,10 +67,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Mak8tech\\MobileWalletZm\\Providers\\MobileWalletServiceProvider"
+                "Mak8Tech\\MobileWalletZm\\Providers\\MobileWalletServiceProvider"
             ],
             "aliases": {
-                "MobileWallet": "Mak8tech\\MobileWalletZm\\Facades\\MobileWallet"
+                "MobileWallet": "Mak8Tech\\MobileWalletZm\\Facades\\MobileWallet"
             }
         }
     },

@@ -30,7 +30,7 @@ class MobileWalletManager
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->default = $this->app['config']['mobile_wallet.default'] ?? 'mtn';
+        $this->default = $app->make('config')->get('mobile_wallet.default', 'mtn');
     }
 
     /**
@@ -72,7 +72,7 @@ class MobileWalletManager
      */
     protected function resolve(string $name): object
     {
-        $config = $this->app['config']["mobile_wallet.{$name}"];
+        $config = $this->app->make('config')->get("mobile_wallet.{$name}");
 
         $providerClass = match ($name) {
             'mtn' => MTNService::class,

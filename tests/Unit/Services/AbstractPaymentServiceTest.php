@@ -20,9 +20,7 @@ class AbstractPaymentServiceTest extends TestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->service->shouldReceive('formatPhoneNumber')->andReturnUsing(function ($number) {
-            return preg_replace('/[^0-9]/', '', $number);
-        });
+        // Don't override formatPhoneNumber anymore, use the real implementation
     }
 
     public function test_it_creates_a_transaction(): void
