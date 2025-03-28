@@ -83,7 +83,7 @@ abstract class AbstractPaymentService
             'phone_number' => $phoneNumber,
             'amount' => $amount,
             'currency' => config('mobile_wallet.currency', 'ZMW'),
-            'reference' => $reference ?? 'Payment of ' . $amount . ' ' . config('mobile_wallet.currency', 'ZMW'),
+            'reference' => $reference ?? 'Payment of '.$amount.' '.config('mobile_wallet.currency', 'ZMW'),
             'narration' => $narration ?? 'Mobile wallet payment',
             'status' => 'pending',
         ]);
@@ -144,7 +144,7 @@ abstract class AbstractPaymentService
 
         // Add country code if not already present
         if (! str_starts_with($phoneNumber, '260')) {
-            $phoneNumber = '260' . $phoneNumber;
+            $phoneNumber = '260'.$phoneNumber;
         }
 
         return $phoneNumber;

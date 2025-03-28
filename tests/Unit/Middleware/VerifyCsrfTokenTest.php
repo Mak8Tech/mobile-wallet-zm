@@ -2,14 +2,9 @@
 
 namespace Mak8Tech\MobileWalletZm\Tests\Unit\Middleware;
 
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Application;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use Illuminate\Contracts\Encryption\Encrypter;
 use Mak8Tech\MobileWalletZm\Http\Middleware\VerifyCsrfToken;
 use Mak8Tech\MobileWalletZm\Tests\TestCase;
 use Mockery;
-use Symfony\Component\HttpFoundation\Response;
 
 class VerifyCsrfTokenTest extends TestCase
 {
